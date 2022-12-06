@@ -50,6 +50,23 @@ const MyFavourite = () => {
   const [dataToDisplay, setDataToDisplay] = React.useState([])
 
 
+  const saveAsFavourite = (data) => {
+    var items = JSON.parse(localStorage.getItem('myfavourite'))
+    let currentID = data.id;
+    var myData = []
+    items = items == null ? myData : items
+    if (items.indexOf(currentID) > -1) {
+      // do nothing
+    } else {
+      myData = [...items]
+      myData.push(currentID)
+      localStorage.setItem('myfavourite', JSON.stringify(myData));
+      reloadData();
+    }
+    alert("Successfully saved!");
+    return true;
+  }
+
   const deleteFavourite = (data) => {
     console.log(data)
     var fav = JSON.parse(localStorage.getItem('myfavourite'))
@@ -65,6 +82,7 @@ const MyFavourite = () => {
       reloadData();
     }
     alert("Successfully removed!");
+    return true;
   }
 
   const handleInput = (e) => {
@@ -173,7 +191,7 @@ const MyFavourite = () => {
         />
       </div>
 
-      <DialogDisplayMyFav data={rowData} open={dialogIsOpen} onClose={closeDialog} deleteFavourite={deleteFavourite} />
+      <DialogDisplayMyFav data={rowData} open={dialogIsOpen} onClose={closeDialog} saveAsFavourite={saveAsFavourite} deleteFavourite={deleteFavourite} />
     </>
   );
 };

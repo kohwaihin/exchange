@@ -41,6 +41,24 @@ const HomePage = () => {
       localStorage.setItem('myfavourite', JSON.stringify(myData));
     }
     alert("Successfully saved!");
+    return true;
+  }
+
+  const deleteFavourite = (data) => {
+    console.log(data)
+    var fav = JSON.parse(localStorage.getItem('myfavourite'))
+    var myData = [];
+    fav = fav == null ? myData : fav
+    myData = [...fav]
+
+    let myIndex = myData.indexOf(data.id);
+    if (myIndex > -1) {
+    
+      myData.splice(myIndex, 1);
+      localStorage.setItem('myfavourite', JSON.stringify(myData));
+    }
+    alert("Successfully removed!");
+    return true;
   }
 
   const handleInput = (e) => {
@@ -138,7 +156,7 @@ const HomePage = () => {
         />
       </div>
 
-      <DialogDisplay data={rowData} open={dialogIsOpen} onClose={closeDialog} saveAsFavourite={saveAsFavourite} />
+      <DialogDisplay data={rowData} open={dialogIsOpen} onClose={closeDialog} saveAsFavourite={saveAsFavourite} deleteFavourite={deleteFavourite}/>
     </>
   );
 };

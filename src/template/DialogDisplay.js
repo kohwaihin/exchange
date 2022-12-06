@@ -7,6 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
+import { useEffect } from 'react';
+import { Visibility } from '@material-ui/icons';
 
 function DisplayData(props) {
     let subjectData = props.jsonData.row
@@ -16,7 +18,7 @@ function DisplayData(props) {
                 <img style={{ verticalAlign: "middle" }} src={subjectData.image} alt={subjectData.name} className="iconDetails" />
             </div>
             <div>
-            <h2>{subjectData.name}</h2>
+                <h2>{subjectData.name}</h2>
                 <table style={{ verticalAlign: "top" }}>
                     <tbody>
                         <tr>
@@ -84,13 +86,46 @@ function DisplayData(props) {
             </div>
         </div>
     )
-
-
-
 }
 
 function DialogDisplay(props) {
-    const { data, open, onClose, saveAsFavourite } = props
+    const [hideButton, setHideButton] = React.useState(false)
+    const { data, open, onClose, saveAsFavourite, deleteFavourite } = props
+
+    const SetToHideButton = () => {
+        var fav = JSON.parse(localStorage.getItem('myfavourite'))
+        var myData = [];
+        fav = fav == null ? myData : fav
+        myData = [...fav]
+
+        let myIndex = myData.indexOf(data.id);
+        setHideButton(myIndex > -1)
+        return hideButton
+    }
+
+    const VerifyToHideButton = (data) => {
+        if (data === undefined) {
+            return false
+        }
+
+        var fav = JSON.parse(localStorage.getItem('myfavourite'))
+        var myData = [];
+        fav = fav == null ? myData : fav
+        myData = [...fav]
+
+        let myIndex = myData.indexOf(data.id);
+        console.log(myIndex)
+        return (myIndex > -1)
+    }
+
+    const saveMe = (e) => {
+        let result = saveAsFavourite(e);
+        if (result) {
+            SetToHideButton()
+        }
+    }
+
+
     return <div>
         <Dialog
             fullScreen
@@ -109,8 +144,13 @@ function DialogDisplay(props) {
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                         Detail
                     </Typography>
-                    <Button autoFocus color="inherit" onClick={() => saveAsFavourite(data.row)}>
+
+                    <Button autoFocus color="inherit" onClick={() => saveMe(data.row)} style={{ visibility: (VerifyToHideButton(data.row) ? 'hidden' : 'visible') }}>
                         Save as favourite
+                    </Button>
+
+                    <Button autoFocus color="inherit" onClick={() => deleteFavourite(data.row)} style={{ visibility: (VerifyToHideButton(data.row) ? 'visible' : 'hidden') }}>
+                        Delete favourite
                     </Button>
 
                 </Toolbar>

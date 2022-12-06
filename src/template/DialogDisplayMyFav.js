@@ -90,7 +90,50 @@ function DisplayData(props) {
 }
 
 function DialogDisplayMyFav(props) {
-    const { data, open, onClose, deleteFavourite } = props
+    const { data, open, onClose, saveAsFavourite, deleteFavourite } = props
+    const [hideButton, setHideButton] = React.useState(false)
+
+    const SetToHideButton = () => {
+        var fav = JSON.parse(localStorage.getItem('myfavourite'))
+        var myData = [];
+        fav = fav == null ? myData : fav
+        myData = [...fav]
+
+        let myIndex = myData.indexOf(data.id);
+        setHideButton(myIndex > -1)
+        return hideButton
+    }
+
+    const VerifyToHideButton = (data) => {
+        if(data === undefined){
+            return false
+        }
+
+        var fav = JSON.parse(localStorage.getItem('myfavourite'))
+        var myData = [];
+        fav = fav == null ? myData : fav
+        myData = [...fav]
+
+        let myIndex = myData.indexOf(data.id);
+        console.log(myIndex)
+        return (myIndex > -1)
+    }
+
+    const saveMe = (e) => {
+        let result = saveAsFavourite(e);
+        if (result) {
+            SetToHideButton()
+        }
+    }
+
+    const deleteMe = (e) => {
+        let result = deleteFavourite(e);
+        if (result) {
+            SetToHideButton()
+        }
+    }
+
+
     return <div>
         <Dialog
             fullScreen
@@ -110,9 +153,14 @@ function DialogDisplayMyFav(props) {
                         Detail
                     </Typography>
                    
-                    <Button autoFocus color="inherit" onClick={() => deleteFavourite(data.row)}>
+                    <Button autoFocus color="inherit" onClick={() => saveMe(data.row)} style={{ visibility: (VerifyToHideButton(data.row) ? 'hidden' : 'visible') }}>
+                        Save as favourite
+                    </Button>
+
+                    <Button autoFocus color="inherit" onClick={() => deleteMe(data.row)} style={{ visibility: (VerifyToHideButton(data.row) ? 'visible' : 'hidden') }}>
                         Delete favourite
                     </Button>
+
                 </Toolbar>
             </AppBar>
             <DisplayData jsonData={data} />
