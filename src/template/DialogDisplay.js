@@ -125,6 +125,13 @@ function DialogDisplay(props) {
         }
     }
 
+    
+    const deleteMe = (e) => {
+        let result = deleteFavourite(e);
+        if (result) {
+            SetToHideButton()
+        }
+    }
 
     return <div>
         <Dialog
@@ -149,7 +156,7 @@ function DialogDisplay(props) {
                         Save as favourite
                     </Button>
 
-                    <Button autoFocus color="inherit" onClick={() => deleteFavourite(data.row)} style={{ visibility: (VerifyToHideButton(data.row) ? 'visible' : 'hidden') }}>
+                    <Button autoFocus color="inherit" onClick={() => deleteMe(data.row)} style={{ visibility: (VerifyToHideButton(data.row) ? 'visible' : 'hidden') }}>
                         Delete favourite
                     </Button>
 
