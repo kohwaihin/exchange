@@ -7,8 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
-import { useEffect } from 'react';
-import { Visibility } from '@material-ui/icons';
 
 function DisplayData(props) {
     let subjectData = props.jsonData.row
